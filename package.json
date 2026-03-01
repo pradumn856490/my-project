@@ -1,101 +1,22 @@
-const express = require('express');
-const fs = require('fs');
-const path = require('path');
-const mongoose = require('mongoose');
-const dns = require('dns');
-require('dotenv').config();
-
-// Fix for ENOTFOUND SRV errors
-dns.setServers(['8.8.8.8', '1.1.1.1']);
-
-const app = express();
-// RENDER FIX: Use process.env.PORT
-const PORT = process.env.PORT || 10000;
-
-// MongoDB Connection
-mongoose.connect(process.env.MONGO_URI)
-    .then(() => console.log('✅ Connected to MongoDB Atlas'))
-    .catch(err => console.error('❌ MongoDB Connection Error:', err));
-
-// Mongoose Schema
-const productSchema = new mongoose.Schema({
-    name: String,
-    img: String,
-    price: String,
-    gallery: [String]
-});
-
-const siteDataSchema = new mongoose.Schema({
-    siteName: String,
-    ownerName: String,
-    phone: String,
-    email: String,
-    address: String,
-    slides: [String],
-    products: [productSchema],
-    about: String,
-    adminPass: String
-});
-
-const SiteData = mongoose.model('SiteData', siteDataSchema);
-
-const multer = require('multer');
-const { CloudinaryStorage } = require('multer-storage-cloudinary');
-const cloudinary = require('cloudinary').v2;
-
-cloudinary.config({
-    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-    api_key: process.env.CLOUDINARY_API_KEY,
-    api_secret: process.env.CLOUDINARY_API_SECRET
-});
-
-app.use(express.json());
-app.use(express.static(__dirname));
-
-const storage = new CloudinaryStorage({
-    cloudinary: cloudinary,
-    params: {
-        folder: 'rohit_furniture',
-        allowed_formats: ['jpg', 'png', 'jpeg', 'webp']
-    }
-});
-const upload = multer({ storage: storage });
-
-app.post('/api/upload', upload.single('image'), (req, res) => {
-    if (!req.file) return res.status(400).send('No file uploaded');
-    res.json({ url: req.file.path });
-});
-
-app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'user.html'));
-});
-
-app.get('/admin', (req, res) => {
-    res.sendFile(path.join(__dirname, 'admin.html'));
-});
-
-app.get('/api/data', async (req, res) => {
-    try {
-        const data = await SiteData.findOne();
-        if (!data) return res.status(404).send('No data found');
-        res.json(data);
-    } catch (err) {
-        res.status(500).send('Error fetching data');
-    }
-});
-
-app.post('/api/save', async (req, res) => {
-    try {
-        const newData = req.body;
-        await SiteData.findOneAndUpdate({}, newData, { upsert: true, new: true });
-        res.send('Data saved successfully');
-    } catch (err) {
-        console.error('Save error:', err);
-        res.status(500).send('Error saving data');
-    }
-});
-
-// RENDER FIX: Listen on 0.0.0.0
-app.listen(PORT, "0.0.0.0", () => {
-    console.log(`🚀 Server running on port ${PORT}`);
-});
+{
+  "name": "rohit-furniture-task",
+  "version": "1.0.0",
+  "description": "Backend for Rohit Furniture",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "cloudinary": "^1.41.3",
+    "dotenv": "^17.3.1",
+    "express": "^5.2.1",
+    "mongoose": "^9.2.3",
+    "multer": "^2.0.2",
+    "multer-storage-cloudinary": "^4.0.0"
+  }
+}
