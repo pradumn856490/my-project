@@ -5,19 +5,23 @@ const mongoose = require('mongoose');
 const dns = require('dns');
 require('dotenv').config();
 
-// Fix for ENOTFOUND SRV errors in some environments
+// Fix for ENOTFOUND SRV errors - Render handles this, but keeping it safe
 dns.setServers(['8.8.8.8', '1.1.1.1']);
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+
+// IMPORTANT: Render uses its own PORT. Do not hardcode 3000.
+const PORT = process.env.PORT || 10000;
 
 // MongoDB Connection
 mongoose.connect(process.env.MONGO_URI)
     .then(() => console.log('✅ Connected to MongoDB Atlas'))
-    .catch(err => console.error('❌ MongoDB Connection Error:', err));
+    .catch(err => {
+        console.error('❌ MongoDB Connection Error:', err);
+        // This log helps you see exactly why MongoDB is failing on Render
+    });
 
 // Mongoose Schema Mapping
-// Requirement: Price, Title, Image URL
 const productSchema = new mongoose.Schema({
     name: String,    // Maps to "Title"
     img: String,     // Maps to "Image URL"
@@ -65,7 +69,7 @@ const upload = multer({ storage: storage });
 // API - Upload Image
 app.post('/api/upload', upload.single('image'), (req, res) => {
     if (!req.file) return res.status(400).send('No file uploaded');
-    res.json({ url: req.file.path }); // Returns the Cloudinary URL directly
+    res.json({ url: req.file.path }); 
 });
 
 // Route for homepage
@@ -93,7 +97,6 @@ app.get('/api/data', async (req, res) => {
 app.post('/api/save', async (req, res) => {
     try {
         const newData = req.body;
-        // Upsert logic: Update the existing document or create one if it doesn't exist
         await SiteData.findOneAndUpdate({}, newData, { upsert: true, new: true });
         res.send('Data saved successfully');
     } catch (err) {
@@ -102,6 +105,7 @@ app.post('/api/save', async (req, res) => {
     }
 });
 
-app.listen(PORT, () => {
-    console.log(`Server is running at http://localhost:${PORT}`);
+// FINAL FIX: Binding to 0.0.0.0 and using Render's PORT
+app.listen(PORT, "0.0.0.0", () => {
+    console.log(`🚀 Server is live on port ${PORT}`);
 });
