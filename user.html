@@ -1,0 +1,1735 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rohit Furniture | Premium Collection</title>
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+    <style>
+        /* --- मॉडर्न सेटिंग्स --- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+            /* स्टाइलिश फोंट */
+        }
+
+        body {
+            background-color: #fcfcfc;
+            color: #333;
+        }
+
+        /* --- 1. प्रीमियम हेडर (Glass Effect) --- */
+        header {
+            width: 100%;
+            height: 65px;
+            background: rgba(255, 255, 255, 0.95);
+            -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 10%;
+            position: fixed;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .logo-area {
+            font-size: 24px;
+            font-weight: 800;
+            letter-spacing: 1px;
+            color: #2c3e50;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 25px;
+            align-items: center;
+        }
+
+        .contact-btn {
+            background: #ff7e20;
+            color: #fff !important;
+            padding: 10px 22px;
+            border-radius: 12px;
+            font-weight: 600;
+            box-shadow: 0 4px 10px rgba(255, 126, 32, 0.2);
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .contact-btn:hover {
+            box-shadow: 0 0 25px rgba(255, 126, 32, 0.5);
+            background: #ff8c3a;
+            transform: translateY(-2px);
+        }
+
+        .contact-btn:active {
+            transform: scale(0.92);
+            box-shadow: 0 2px 5px rgba(255, 126, 32, 0.3);
+        }
+
+        .nav-buttons a {
+            text-decoration: none;
+            color: #555;
+            font-weight: 600;
+            font-size: 15px;
+            transition: 0.3s;
+            position: relative;
+        }
+
+        .nav-buttons a:hover {
+            color: #b38b6d;
+            /* वुडन शेड */
+        }
+
+        /* --- 2. मेन स्क्रॉलिंग सेक्शन --- */
+        .main-content {
+            margin-top: 85px;
+            padding: 20px 20px 0 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* बड़ी हीरो इमेज (कटे हुए किनारे) */
+        .hero-banner {
+            width: 85%;
+            max-width: 1100px;
+            height: 450px;
+            border-radius: 25px;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            margin-bottom: 50px;
+            position: relative;
+        }
+
+        .hero-slides-container {
+            display: flex;
+            width: 500%;
+            /* 5 images */
+            height: 100%;
+            transition: transform 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+        }
+
+        .hero-slide {
+            width: 20%;
+            height: 100%;
+            flex-shrink: 0;
+        }
+
+        .hero-slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Slider Dots (Now outside/below the image) */
+        .slider-dots {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: -35px 0 45px 0;
+            /* Positioned between image and title */
+            z-index: 10;
+            position: relative;
+        }
+
+        .dot {
+            width: 10px;
+            height: 10px;
+            background: #ddd;
+            /* Visible on light background */
+            border-radius: 50%;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .dot.active {
+            background: #ff7e20;
+            width: 25px;
+            border-radius: 10px;
+        }
+
+        /* Desktop Navigation Arrows (PC/Laptop Only) */
+        .slider-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 45px;
+            height: 45px;
+            background: rgba(255, 255, 255, 0.2);
+            -webkit-backdrop-filter: blur(5px);
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 15;
+            transition: 0.3s;
+            opacity: 0;
+            /* Hidden by default, show on hover */
+        }
+
+        .hero-banner:hover .slider-nav {
+            opacity: 1;
+            background: rgba(255, 255, 255, 0.4);
+        }
+
+        .slider-nav:hover {
+            background: #ff7e20 !important;
+            border-color: #ff7e20;
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        .prev-btn {
+            left: 20px;
+        }
+
+        .next-btn {
+            right: 20px;
+        }
+
+        /* Hide arrows on Mobile and Tablets (Touch Devices) */
+        @media (max-width: 1024px),
+        (pointer: coarse) {
+            .slider-nav {
+                display: none !important;
+            }
+        }
+
+        /* --- 3. 15 प्रोडक्ट्स ग्रिड --- */
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 30px;
+            width: 85%;
+            max-width: 1100px;
+            padding-bottom: 20px;
+        }
+
+        .card {
+            background: #fff;
+            border-radius: 20px;
+            /* कटे हुए किनारे */
+            overflow: hidden;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease;
+            border: 1px solid #f0f0f0;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        /* इमेज बॉक्स जहाँ नाम बीच में है */
+        .card-img-container {
+            height: 200px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card-img-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .overlay-name {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(255, 255, 255, 0.9);
+            padding: 8px 20px;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 14px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        /* व्यू बटन */
+        .view-box {
+            padding: 15px;
+            text-align: center;
+            background: #fff;
+            font-weight: bold;
+            font-size: 13px;
+            letter-spacing: 1px;
+            color: #b38b6d;
+            border-top: 1px solid #f9f9f9;
+            cursor: pointer;
+        }
+
+        .view-box:hover {
+            background: #b38b6d;
+            color: #fff;
+        }
+
+        /* --- 4. मेन डैशबोर्ड सर्च एरिया --- */
+        .main-search-area {
+            text-align: center;
+            margin-bottom: 60px;
+            width: 85%;
+            max-width: 1100px;
+        }
+
+        .main-search-area h2 {
+            font-size: 28px;
+            font-weight: 800;
+            color: #2c3e50;
+            margin-bottom: 25px;
+            letter-spacing: 1px;
+        }
+
+        .main-search-area span {
+            color: #ff7e20;
+        }
+
+        .main-search-box {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            max-width: 650px;
+            margin: 0 auto;
+        }
+
+        .main-search-box input {
+            flex: 1;
+            padding: 16px 25px;
+            border-radius: 15px;
+            border: 2px solid #f0f0f0;
+            font-size: 16px;
+            outline: none;
+            transition: 0.3s;
+            background: #fff;
+        }
+
+        .main-search-box input:focus {
+            border-color: #ff7e20;
+            box-shadow: 0 8px 25px rgba(255, 126, 32, 0.1);
+        }
+
+        .main-search-box button {
+            background: #ff7e20;
+            color: white;
+            border: none;
+            padding: 0 35px;
+            border-radius: 15px;
+            font-weight: 600;
+            font-size: 15px;
+            cursor: pointer;
+            transition: 0.3s;
+            box-shadow: 0 4px 15px rgba(255, 126, 32, 0.2);
+        }
+
+        .main-search-box button:hover {
+            background: #e66d10;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(230, 109, 16, 0.3);
+        }
+
+        /* स्क्रॉलबार को सुंदर बनाने के लिए */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        /* --- 5. रिस्पॉन्सिव सेटिंग्स (Mobile Friendly) --- */
+        @media (max-width: 768px) {
+            header {
+                padding: 0 5%;
+                height: 60px;
+            }
+
+            .logo-area {
+                font-size: 20px;
+            }
+
+            .nav-buttons {
+                gap: 15px;
+            }
+
+            .nav-buttons a:not(.contact-btn) {
+                font-size: 13px;
+                display: block;
+            }
+
+            .contact-btn {
+                display: block !important;
+                padding: 8px 15px;
+                font-size: 13px;
+            }
+
+            .main-content {
+                margin-top: 80px;
+                padding: 10px;
+            }
+
+            .hero-banner {
+                width: 95%;
+                height: 250px;
+                margin-bottom: 30px;
+            }
+
+            .main-search-area h2 {
+                font-size: 22px;
+            }
+
+            .main-search-box {
+                flex-direction: column;
+                width: 95%;
+                gap: 10px;
+            }
+
+            .main-search-box button {
+                padding: 15px;
+                width: 100%;
+            }
+
+            .owner-card,
+            .about-modal-card {
+                padding: 25px 20px;
+                width: 95%;
+            }
+
+            .product-grid {
+                width: 95%;
+                grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+                /* Mobile par 2 columns dikhenge */
+                gap: 15px;
+            }
+
+            .card-img-container {
+                height: 150px;
+            }
+
+            .overlay-name {
+                font-size: 11px;
+                padding: 5px 12px;
+            }
+
+            .view-box {
+                padding: 10px;
+                font-size: 11px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .product-grid {
+                grid-template-columns: 1fr 1fr;
+                /* Pakka 2 columns chhote phones par bhi */
+            }
+        }
+
+        /* --- 6. कॉन्टैक्ट पॉपअप (Owner Info Card) --- */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            -webkit-backdrop-filter: blur(8px);
+            backdrop-filter: blur(8px);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            opacity: 0;
+            transition: 0.4s;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        .owner-card {
+            background: #fff;
+            width: 90%;
+            max-width: 400px;
+            padding: 40px 30px;
+            border-radius: 30px;
+            text-align: center;
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.3);
+            position: relative;
+            transform: translateY(30px);
+            transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border: 1px solid rgba(255, 126, 32, 0.1);
+        }
+
+        .modal-overlay.active .owner-card {
+            transform: translateY(0);
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 20px;
+            right: 25px;
+            font-size: 28px;
+            cursor: pointer;
+            color: #ccc;
+            transition: 0.3s;
+        }
+
+        .close-modal:hover {
+            color: #ff7e20;
+        }
+
+        .owner-avatar {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #ff7e20, #b38b6d);
+            color: white;
+            font-size: 32px;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            margin: 0 auto 20px;
+            box-shadow: 0 10px 20px rgba(255, 126, 32, 0.2);
+        }
+
+        .owner-details h3 {
+            font-size: 24px;
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+
+        .owner-details .tag {
+            font-size: 12px;
+            background: #fff3eb;
+            color: #ff7e20;
+            padding: 4px 12px;
+            border-radius: 50px;
+            font-weight: 700;
+            display: inline-block;
+            margin-bottom: 25px;
+        }
+
+        .info-row {
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+            text-align: left;
+            margin-bottom: 18px;
+            padding: 10px;
+            background: #fcfcfc;
+            border-radius: 15px;
+            border: 1px solid #f0f0f0;
+            cursor: pointer;
+            transition: 0.3s;
+            text-decoration: none;
+        }
+
+        .info-row:hover {
+            border-color: #ff7e20;
+            background: #fffafa;
+            transform: scale(1.02);
+        }
+
+        .info-row:active {
+            transform: scale(0.98);
+        }
+
+        .info-row b {
+            font-size: 13px;
+            color: #ff7e20;
+            display: block;
+            margin-bottom: 2px;
+        }
+
+        .info-row span,
+        .info-row a {
+            font-size: 14px;
+            color: #555;
+            text-decoration: none;
+            line-height: 1.4;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 14px;
+            border-radius: 15px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 14px;
+            transition: 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn-call {
+            background: #2980b9;
+            /* Professional Blue */
+            color: white;
+            box-shadow: 0 5px 15px rgba(52, 152, 219, 0.3);
+        }
+
+        .btn-whatsapp {
+            background: #25D366;
+            /* WhatsApp Green */
+            color: white;
+            box-shadow: 0 5px 15px rgba(37, 211, 102, 0.2);
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            filter: brightness(1.1);
+        }
+
+        /* --- 7. अबाउट पॉपअप (About Us Modal) --- */
+        .about-modal-card {
+            background: #fff;
+            width: 95%;
+            max-width: 650px;
+            max-height: 85vh;
+            padding: 40px;
+            border-radius: 30px;
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.3);
+            position: relative;
+            overflow-y: auto;
+            transform: translateY(30px);
+            transition: 0.4s;
+        }
+
+        .modal-overlay.active .about-modal-card {
+            transform: translateY(0);
+        }
+
+        .about-content {
+            text-align: left;
+            line-height: 1.6;
+        }
+
+        .about-content h2 {
+            font-size: 28px;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            border-left: 5px solid #ff7e20;
+            padding-left: 15px;
+        }
+
+        .about-content p {
+            color: #555;
+            margin-bottom: 15px;
+            font-size: 15px;
+        }
+
+        .about-content ul {
+            margin-bottom: 20px;
+            padding-left: 20px;
+        }
+
+        .about-content li {
+            margin-bottom: 10px;
+            color: #444;
+        }
+
+        /* --- 8. लैंग्वेज ट्रांसलेटर बटन --- */
+        .language-wrapper {
+            position: sticky;
+            top: -20px;
+            right: 0;
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 10px;
+        }
+
+        .lang-btn {
+            background: #f0f0f0;
+            border: 1px solid #ddd;
+            padding: 5px 12px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 700;
+            color: #2c3e50;
+            transition: 0.3s;
+        }
+
+        .lang-btn:hover {
+            background: #ff7e20;
+            color: white;
+            border-color: #ff7e20;
+        }
+
+        /* --- 9. गूगल फीडबैक सेक्शन (Footer) --- */
+        .feedback-section {
+            background: #2c3e50;
+            color: white;
+            padding: 40px 10%;
+            text-align: center;
+            width: 100%;
+            margin-top: 0px;
+        }
+
+        .google-reviews {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 30px;
+            border-radius: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .google-reviews p {
+            margin-bottom: 20px;
+            color: #bdc3c7;
+            font-size: 14px;
+        }
+
+        .google-logo {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            display: inline-block;
+            border-bottom: 2px solid #ff7e20;
+            padding-bottom: 2px;
+        }
+
+        .google-logo span:nth-child(6n+1) {
+            color: #4285F4;
+        }
+
+        .google-logo span:nth-child(6n+2) {
+            color: #EA4335;
+        }
+
+        .google-logo span:nth-child(6n+3) {
+            color: #FBBC05;
+        }
+
+        .google-logo span:nth-child(6n+4) {
+            color: #4285F4;
+        }
+
+        .google-logo span:nth-child(6n+5) {
+            color: #34A853;
+        }
+
+        .google-logo span:nth-child(6n+6) {
+            color: #EA4335;
+        }
+
+        .stars {
+            color: #FBBC05;
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .rating-text {
+            font-size: 18px;
+            margin-bottom: 25px;
+            font-weight: 500;
+        }
+
+        .feedback-btn {
+            background: #ff7e20;
+            color: white;
+            text-decoration: none;
+            padding: 12px 30px;
+            border-radius: 50px;
+            font-weight: 700;
+            display: inline-block;
+            transition: 0.3s;
+            box-shadow: 0 4px 15px rgba(255, 126, 32, 0.3);
+        }
+
+        .feedback-btn:hover {
+            transform: translateY(-3px);
+            background: #e66d10;
+            box-shadow: 0 6px 20px rgba(255, 126, 32, 0.4);
+        }
+
+        .copyright {
+            margin-top: 40px;
+            font-size: 13px;
+            color: #bdc3c7;
+        }
+
+        /* --- 10. प्रोडक्ट डिटेल्स व्यू (Full Screen Below Header) --- */
+        .details-overlay {
+            position: fixed;
+            top: 65px;
+            /* Exactly below header */
+            left: 0;
+            width: 100%;
+            height: calc(100vh - 65px);
+            background: #fff;
+            z-index: 900;
+            display: none;
+            overflow-y: auto;
+            animation: slideUp 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(100%);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .details-container {
+            max-width: 95%;
+            /* Use almost full width */
+            margin: 0 auto;
+            padding: 20px 2%;
+            /* Reduced side padding */
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+            position: relative;
+        }
+
+        .details-main {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            /* Center horizontally */
+            text-align: center;
+            padding-top: 5px;
+            /* Some breathing room from top */
+        }
+
+        .details-info h1 {
+            font-size: 28px;
+            font-family: 'Pacifico', cursive;
+            background: linear-gradient(to right, #ff0000, #ff7e20, #febd27, #2ecc71, #3498db, #9b59b6);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 400;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+            display: inline-block;
+            text-transform: none;
+            filter: drop-shadow(0 2px 5px rgba(0, 0, 0, 0.1));
+            position: relative;
+        }
+
+        .details-info h1::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 100%;
+            height: 10px;
+            background: linear-gradient(to right, #ff0000, #ff7e20, #febd27, #2ecc71, #3498db, #9b59b6);
+            /* Wavy (Wave Form) Mask */
+            -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 4'%3E%3Cpath fill='none' stroke='black' stroke-width='2' d='M0 3.5c5 0 5-3 10-3s5 3 10 3 5-3 10-3 5 3 10 3'/%3E%3C/svg%3E");
+            mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 4'%3E%3Cpath fill='none' stroke='black' stroke-width='2' d='M0 3.5c5 0 5-3 10-3s5 3 10 3 5-3 10-3 5 3 10 3'/%3E%3C/svg%3E");
+            -webkit-mask-size: 20px 100%;
+            mask-size: 20px 100%;
+            -webkit-mask-repeat: repeat-x;
+            mask-repeat: repeat-x;
+        }
+
+        @media (max-width: 768px) {
+            .details-main {
+                grid-template-columns: 1fr;
+            }
+
+            .details-img-box {
+                height: 280px;
+            }
+
+            .details-container {
+                padding: 30px 5%;
+            }
+
+            .details-overlay {
+                top: 60px;
+                height: calc(100vh - 60px);
+            }
+        }
+
+        /* Full Screen Image Viewer (Lightbox) */
+        .lightbox {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 3000;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: 0.3s;
+        }
+
+        .lightbox.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        .lightbox img {
+            max-width: 95%;
+            max-height: 90vh;
+            border-radius: 10px;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+            transform: scale(0.9);
+            transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .lightbox.active img {
+            transform: scale(1);
+        }
+
+        .close-lightbox {
+            position: absolute;
+            top: 30px;
+            right: 30px;
+            color: white;
+            font-size: 40px;
+            cursor: pointer;
+            z-index: 10;
+        }
+
+        .details-gallery-grid {
+            width: 100%;
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            /* 5 columns on Desktop */
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        @media (max-width: 1200px) {
+            .details-gallery-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+
+        @media (max-width: 900px) {
+            .details-gallery-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @media (max-width: 600px) {
+            .details-gallery-grid {
+                grid-template-columns: repeat(2, 1fr);
+                /* 2 columns on Mobile */
+                gap: 10px;
+            }
+        }
+
+        /* Responsive Improvements for entire site */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        .product-grid {
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+        }
+
+        @media (max-width: 480px) {
+            .product-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 12px;
+            }
+
+            .hero-banner {
+                height: 200px;
+            }
+
+            .logo-area img {
+                height: 50px !important;
+            }
+        }
+
+        /* --- Google Translate Styles --- */
+        #google_translate_element {
+            margin-bottom: 20px;
+            text-align: right;
+            padding: 5px;
+        }
+
+        .goog-te-gadget-simple {
+            border-radius: 12px !important;
+            padding: 6px 12px !important;
+            border: 1px solid rgba(0, 0, 0, 0.1) !important;
+            font-family: 'Poppins', sans-serif !important;
+            background: #f9f9f9 !important;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .goog-te-gadget-simple:hover {
+            background: #fff !important;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        .goog-te-gadget-icon {
+            display: none !important;
+        }
+
+        .goog-te-menu-value span {
+            color: #555 !important;
+            font-size: 13px !important;
+            font-weight: 600 !important;
+        }
+
+        /* Hide Google Translate Banner */
+        .goog-te-banner-frame.skiptranslate {
+            display: none !important;
+        }
+
+        body {
+            top: 0px !important;
+        }
+
+        .goog-tooltip {
+            display: none !important;
+        }
+
+        .goog-tooltip:hover {
+            display: none !important;
+        }
+
+        .goog-text-highlight {
+            background-color: transparent !important;
+            box-shadow: none !important;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header class="notranslate">
+        <div class="logo-area"><img src="ROHIT YADAV.png" alt="Rohit Yadav" style="height: 50px; object-fit: contain;">
+        </div>
+        <nav class="nav-buttons">
+            <a href="javascript:void(0)" onclick="openAboutModal()">About</a>
+            <a href="javascript:void(0)" class="contact-btn" onclick="openContactModal()">Contact</a>
+        </nav>
+    </header>
+
+    <!-- About Us Modal -->
+    <div class="modal-overlay" id="aboutModal">
+        <div class="about-modal-card">
+            <span class="close-modal" onclick="closeAboutModal()">&times;</span>
+
+            <div id="google_translate_element"></div>
+
+            <div class="about-content" id="aboutText">
+                <h2>About Rohit Furniture</h2>
+                <p>Welcome to <b>Rohit Furniture</b>, where we turn your house into a home with our exquisite collection
+                    of premium wooden furniture. Established with a passion for craftsmanship, we specialize in creating
+                    durable, stylish, and functional pieces that last for generations.</p>
+
+                <p><b>Our Specialties:</b></p>
+                <ul>
+                    <li><b>Quality Timber:</b> We use 100% seasoned teak and rosewood for maximum durability.</li>
+                    <li><b>Custom Designs:</b> Every home is unique. We provide tailor-made furniture that fits your
+                        specific space.</li>
+                    <li><b>Modern Aesthetics:</b> Our designs blend traditional hand-carving with modern minimalist
+                        styles.</li>
+                </ul>
+
+                <p><b>Why Choose Us?</b></p>
+                <p>At Nashik's premier furniture showroom, we believe in "Quality over Quantity". From modular kitchens
+                    to handcrafted doors and luxury wardrobes, our expert artisans ensure every piece undergoes a
+                    rigorous quality check before reaching your doorstep.</p>
+
+                <p>Located in the heart of Nashik, we are dedicated to providing the best furniture solutions for homes,
+                    offices, and commercial spaces.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Owner Contact Modal -->
+    <div class="modal-overlay notranslate" id="contactModal">
+        <div class="owner-card">
+            <span class="close-modal" onclick="closeContactModal()">&times;</span>
+            <div class="owner-avatar">PY</div>
+            <div class="owner-details">
+                <h3>Pradumn Yadav</h3>
+                <span class="tag">OWNER & FOUNDER</span>
+
+                <a href="tel:+918957675571" class="info-row">
+                    <div>
+                        <b>Phone Number</b>
+                        <span>+91 8957675571</span>
+                    </div>
+                </a>
+
+                <a href="mailto:pradumn@gmail.com" class="info-row">
+                    <div>
+                        <b>Email Address</b>
+                        <span>pradumn@gmail.com</span>
+                    </div>
+                </a>
+
+                <a href="https://www.google.com/maps/search/?api=1&query=Anish+Furniture+Jay+Ganesh+Colony+Nashik"
+                    target="_blank" rel="noopener" class="info-row">
+                    <div>
+                        <b>Showroom Address</b>
+                        <span>Jay Ganesh Colony, Pimpalgaon Bahula Siwar, Shramik Nagar, Satpur, Nashik</span>
+                    </div>
+                </a>
+            </div>
+
+            <div class="action-buttons">
+                <a href="tel:+918957675571" class="btn btn-call">CALL NOW</a>
+                <a href="https://wa.me/918957675571" target="_blank" rel="noopener"
+                    class="btn btn-whatsapp">WHATSAPP</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="main-content notranslate">
+        <div class="hero-banner" id="heroSlider">
+            <div class="hero-slides-container" id="heroSlides">
+                <div class="hero-slide"><img
+                        src="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?q=80&w=1200" alt="Slider 1">
+                </div>
+                <div class="hero-slide"><img
+                        src="https://images.unsplash.com/photo-1524758631624-e2822e304c36?q=80&w=1200" alt="Slider 2">
+                </div>
+                <div class="hero-slide"><img
+                        src="https://images.unsplash.com/photo-1600121848594-d8644e57abab?q=80&w=1200" alt="Slider 3">
+                </div>
+                <div class="hero-slide"><img
+                        src="https://images.unsplash.com/photo-1540518614846-7eded433c457?q=80&w=1200" alt="Slider 4">
+                </div>
+                <div class="hero-slide"><img
+                        src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=1200" alt="Slider 5">
+                </div>
+            </div>
+
+            <!-- PC/Laptop Navigation Arrows -->
+            <button class="slider-nav prev-btn" onclick="prevSlideClick()">&#10094;</button>
+            <button class="slider-nav next-btn" onclick="nextSlideClick()">&#10095;</button>
+        </div>
+        <div class="slider-dots" id="sliderDots">
+            <div class="dot active" onclick="goToSlide(0)"></div>
+            <div class="dot" onclick="goToSlide(1)"></div>
+            <div class="dot" onclick="goToSlide(2)"></div>
+            <div class="dot" onclick="goToSlide(3)"></div>
+            <div class="dot" onclick="goToSlide(4)"></div>
+        </div>
+
+        <div class="main-search-area">
+            <h2>ROHIT <span>FURNITURE</span></h2>
+            <div class="main-search-box">
+                <input type="text" id="productSearch" placeholder="Find premium furniture for your home...">
+                <button onclick="filterProducts()">SEARCH</button>
+            </div>
+        </div>
+
+        <div class="product-grid" id="productGrid">
+
+            <div class="card">
+                <div class="card-img-container">
+                    <img src="https://images.unsplash.com/photo-1517705008128-361805f42e86?q=80&w=400"
+                        alt="Door Design">
+                    <div class="overlay-name">Modern Door</div>
+                </div>
+                <div class="view-box" onclick="openDetails(this)">VIEW MORE</div>
+            </div>
+
+            <div class="card">
+                <div class="card-img-container">
+                    <img src="https://images.unsplash.com/photo-1556911220-e1502402c5ff?q=80&w=400" alt="Kitchen">
+                    <div class="overlay-name">Modular Kitchen</div>
+                </div>
+                <div class="view-box" onclick="openDetails(this)">VIEW MORE</div>
+            </div>
+
+            <div class="card">
+                <div class="card-img-container">
+                    <img src="https://images.unsplash.com/photo-1615529328331-f8917597711f?q=80&w=400"
+                        alt="Handcrafted Mirror">
+                    <div class="overlay-name">Handcrafted Mirror</div>
+                </div>
+                <div class="view-box" onclick="openDetails(this)">VIEW MORE</div>
+            </div>
+
+            <!-- New Cards Start Here -->
+            <div class="card">
+                <div class="card-img-container">
+                    <img src="https://images.unsplash.com/photo-1540518614846-7eded433c457?q=80&w=400" alt="Sofa">
+                    <div class="overlay-name">Luxury Sofa</div>
+                </div>
+                <div class="view-box" onclick="openDetails(this)">VIEW MORE</div>
+            </div>
+
+            <div class="card">
+                <div class="card-img-container">
+                    <img src="https://images.unsplash.com/photo-1533090161767-e6ffed986c88?q=80&w=400" alt="Bed">
+                    <div class="overlay-name">King Size Bed</div>
+                </div>
+                <div class="view-box" onclick="openDetails(this)">VIEW MORE</div>
+            </div>
+
+            <div class="card">
+                <div class="card-img-container">
+                    <img src="https://images.unsplash.com/photo-1592078615290-033ee584e267?q=80&w=400"
+                        alt="Dining Table">
+                    <div class="overlay-name">Dining Table</div>
+                </div>
+                <div class="view-box" onclick="openDetails(this)">VIEW MORE</div>
+            </div>
+
+            <div class="card">
+                <div class="card-img-container">
+                    <img src="https://images.unsplash.com/photo-1583847268964-b28dc8f51f92?q=80&w=400"
+                        alt="Coffee Table">
+                    <div class="overlay-name">Coffee Table</div>
+                </div>
+                <div class="view-box" onclick="openDetails(this)">VIEW MORE</div>
+            </div>
+
+            <div class="card">
+                <div class="card-img-container">
+                    <img src="https://images.unsplash.com/photo-1518455027359-f3f816b1a238?q=80&w=400"
+                        alt="Study Table">
+                    <div class="overlay-name">Study Table</div>
+                </div>
+                <div class="view-box" onclick="openDetails(this)">VIEW MORE</div>
+            </div>
+
+            <div class="card">
+                <div class="card-img-container">
+                    <img src="https://images.unsplash.com/photo-1592078615290-033ee584e267?q=80&w=400" alt="Bookshelf">
+                    <div class="overlay-name">Premium Bookshelf</div>
+                </div>
+                <div class="view-box" onclick="openDetails(this)">VIEW MORE</div>
+            </div>
+
+            <div class="card">
+                <div class="card-img-container">
+                    <img src="https://images.unsplash.com/photo-1524758631624-e2822e304c36?q=80&w=400"
+                        alt="Office Chair">
+                    <div class="overlay-name">Office Chair</div>
+                </div>
+                <div class="view-box" onclick="openDetails(this)">VIEW MORE</div>
+            </div>
+
+            <div class="card">
+                <div class="card-img-container">
+                    <img src="https://images.unsplash.com/photo-1567016432779-094069958ea5?q=80&w=400" alt="TV Unit">
+                    <div class="overlay-name">Modern TV Unit</div>
+                </div>
+                <div class="view-box" onclick="openDetails(this)">VIEW MORE</div>
+            </div>
+
+            <div class="card">
+                <div class="card-img-container">
+                    <img src="https://images.unsplash.com/photo-1523413651479-597eb2da0ad6?q=80&w=400"
+                        alt="Dressing Table">
+                    <div class="overlay-name">Dressing Table</div>
+                </div>
+                <div class="view-box" onclick="openDetails(this)">VIEW MORE</div>
+            </div>
+
+            <div class="card">
+                <div class="card-img-container">
+                    <img src="https://images.unsplash.com/photo-1544457070-4cd773b4d71e?q=80&w=400" alt="Armchair">
+                    <div class="overlay-name">Royal Armchair</div>
+                </div>
+                <div class="view-box" onclick="openDetails(this)">VIEW MORE</div>
+            </div>
+
+            <div class="card">
+                <div class="card-img-container">
+                    <img src="https://images.unsplash.com/photo-1581428982868-e410dd047a90?q=80&w=400" alt="Shoe Rack">
+                    <div class="overlay-name">Wooden Shoe Rack</div>
+                </div>
+                <div class="view-box" onclick="openDetails(this)">VIEW MORE</div>
+            </div>
+
+            <div class="card">
+                <div class="card-img-container">
+                    <img src="https://images.unsplash.com/photo-1620641788421-7a1c342ea42e?q=80&w=400" alt="Temple">
+                    <div class="overlay-name">Pooja Mandir</div>
+                </div>
+                <div class="view-box" onclick="openDetails(this)">VIEW MORE</div>
+            </div>
+
+            <div class="card">
+                <div class="card-img-container">
+                    <img src="https://images.unsplash.com/photo-1596464716127-f2a82984de30?q=80&w=400"
+                        alt="Balcony Set">
+                    <div class="overlay-name">Balcony Set</div>
+                </div>
+                <div class="view-box" onclick="openDetails(this)">VIEW MORE</div>
+            </div>
+
+            <div class="card">
+                <div class="card-img-container">
+                    <img src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?q=80&w=400" alt="Side Table">
+                    <div class="overlay-name">Side Table</div>
+                </div>
+                <div class="view-box" onclick="openDetails(this)">VIEW MORE</div>
+            </div>
+
+            <div class="card">
+                <div class="card-img-container">
+                    <img src="https://images.unsplash.com/photo-1594026112284-02bb6f3352fe?q=80&w=400" alt="Wall Shelf">
+                    <div class="overlay-name">Wall Shelf</div>
+                </div>
+                <div class="view-box" onclick="openDetails(this)">VIEW MORE</div>
+            </div>
+
+            <div class="card">
+                <div class="card-img-container">
+                    <img src="https://images.unsplash.com/photo-1618219908412-a29a1bb7b86e?q=80&w=400"
+                        alt="Window Design">
+                    <div class="overlay-name">Window Design</div>
+                </div>
+                <div class="view-box" onclick="openDetails(this)">VIEW MORE</div>
+            </div>
+
+            <div class="card">
+                <div class="card-img-container">
+                    <img src="https://images.unsplash.com/photo-1555041469-a586c61ea9bc?q=80&w=400" alt="Lounge Chair">
+                    <div class="overlay-name">Lounge Chair</div>
+                </div>
+                <div class="view-box" onclick="openDetails(this)">VIEW MORE</div>
+            </div>
+
+            <div class="card">
+                <div class="card-img-container">
+                    <img src="https://images.unsplash.com/photo-1532323544230-7191fd51bc1b?q=80&w=400"
+                        alt="Drawer Unit">
+                    <div class="overlay-name">Drawer Unit</div>
+                </div>
+                <div class="view-box" onclick="openDetails(this)">VIEW MORE</div>
+            </div>
+
+            <div class="card">
+                <div class="card-img-container">
+                    <img src="https://images.unsplash.com/photo-1616046229478-9901c5536a45?q=80&w=400" alt="Bar Stool">
+                    <div class="overlay-name">Classic Bar Stool</div>
+                </div>
+                <div class="view-box" onclick="openDetails(this)">VIEW MORE</div>
+            </div>
+
+            <div class="card">
+                <div class="card-img-container">
+                    <img src="https://images.unsplash.com/photo-1538688525198-9b88f6f53126?q=80&w=400" alt="Wall Unit">
+                    <div class="overlay-name">Premium Wall Unit</div>
+                </div>
+                <div class="view-box" onclick="openDetails(this)">VIEW MORE</div>
+            </div>
+
+            <div class="card">
+                <div class="card-img-container">
+                    <img src="https://images.unsplash.com/photo-1543167664-40d699029312?q=80&w=400" alt="Chandelier">
+                    <div class="overlay-name">Luxury Chandelier</div>
+                </div>
+                <div class="view-box" onclick="openDetails(this)">VIEW MORE</div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Product Details Overlay -->
+    <div class="details-overlay notranslate" id="detailsPage">
+        <div class="details-container">
+            <span class="close-modal" onclick="closeDetails()">&times;</span>
+
+            <div class="details-main">
+                <div class="details-info">
+                    <h1 id="detTitle">Product Name</h1>
+                </div>
+                <div id="detailsGallery" class="details-gallery-grid">
+                    <!-- Gallery images will be here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Lightbox Overlay -->
+    <div class="lightbox notranslate" id="lightbox" onclick="closeLightbox()">
+        <span class="close-lightbox" onclick="closeLightbox()">&times;</span>
+        <img class="lightbox-content" id="lightboxImg">
+    </div>
+
+    <!-- Google Feedback Section -->
+    <footer class="feedback-section notranslate">
+        <div class="google-reviews">
+            <div class="google-logo">
+                <span>G</span><span>o</span><span>o</span><span>g</span><span>l</span><span>e</span>
+                <span>R</span><span>e</span><span>v</span><span>i</span><span>e</span><span>w</span><span>s</span>
+            </div>
+            <div class="stars">★★★★★</div>
+            <div class="rating-text">4.9 / 5.0 Rating based on 500+ Happy Customers</div>
+            <p>Your feedback helps us grow. Please share your experience with Rohit Furniture on Google.</p>
+            <a href="https://www.google.com/search?q=Rohit+Furniture+Nashik" target="_blank" rel="noopener"
+                class="feedback-btn">WRITE A REVIEW</a>
+        </div>
+        <div class="copyright">
+            &copy; 2024 Rohit Furniture. Designed with ❤️ in Nashik. | <a href="admin.html"
+                style="color: inherit; text-decoration: none; opacity: 0.5;">Admin Login</a>
+        </div>
+    </footer>
+
+    <script>
+        // --- Dynamic Content Loading (FROM BACKEND) ---
+        let siteData = {};
+
+        async function fetchSiteData() {
+            try {
+                const response = await fetch('/api/data?t=' + Date.now());
+                if (!response.ok) throw new Error('Network response was not ok');
+                siteData = await response.json();
+                applySiteData();
+            } catch (error) {
+                console.error('Fetch error:', error);
+                // Fallback if backend is not running
+                siteData = JSON.parse(localStorage.getItem('rohitFurnitureData')) || {};
+                if (Object.keys(siteData).length > 0) applySiteData();
+            }
+        }
+
+        function applySiteData() {
+            // Update Site Name
+            document.querySelectorAll('.logo-area img').forEach(img => img.alt = siteData.siteName);
+            const searchH2 = document.querySelector('.main-search-area h2');
+            if (searchH2) searchH2.innerHTML = `${siteData.siteName.split(' ')[0]} <span>${siteData.siteName.split(' ')[1] || ''}</span>`;
+
+            // Update Owner Name
+            const ownerH3 = document.querySelector('.owner-details h3');
+            if (ownerH3) ownerH3.innerText = siteData.ownerName || "Pradumn Yadav";
+            const ownerAvatar = document.querySelector('.owner-avatar');
+            if (ownerAvatar && siteData.ownerName) {
+                const initials = siteData.ownerName.split(' ').map(n => n[0]).join('').toUpperCase();
+                ownerAvatar.innerText = initials;
+            }
+
+            // Update Contact Info
+            const fullPhone = siteData.phone.startsWith('+91') ? siteData.phone : '+91 ' + siteData.phone;
+            const purePhone = fullPhone.replace(/\s/g, '');
+
+            const phoneLinks = document.querySelectorAll('a[href^="tel:"]');
+            phoneLinks.forEach(link => {
+                link.href = `tel:${purePhone}`;
+                const span = link.querySelector('span');
+                if (span) span.innerText = fullPhone;
+            });
+
+            const waLinks = document.querySelectorAll('a[href*="wa.me"]');
+            waLinks.forEach(link => {
+                link.href = `https://wa.me/${purePhone.replace('+', '')}`;
+            });
+
+            const mailLinks = document.querySelectorAll('a[href^="mailto:"]');
+            mailLinks.forEach(link => {
+                link.href = `mailto:${siteData.email}`;
+                const span = link.querySelector('span');
+                if (span) span.innerText = siteData.email;
+            });
+
+            // Update Address
+            const addrContainers = document.querySelectorAll('.info-row div b');
+            addrContainers.forEach(b => {
+                if (b.innerText === 'Showroom Address') {
+                    const span = b.nextElementSibling;
+                    if (span) {
+                        span.innerText = siteData.address;
+                        const anchor = b.closest('a');
+                        if (anchor) anchor.href = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(siteData.address)}`;
+                    }
+                }
+            });
+
+            // Update Slider
+            const sliderContainer = document.getElementById('heroSlides');
+            if (sliderContainer && siteData.slides && siteData.slides.length > 0) {
+                sliderContainer.innerHTML = siteData.slides.map(s => `
+                    <div class="hero-slide"><img src="${s}" alt="Slide"></div>
+                `).join('');
+                sliderContainer.style.width = (siteData.slides.length * 100) + '%';
+                // Update dots
+                const dotsContainer = document.getElementById('sliderDots');
+                if (dotsContainer) {
+                    dotsContainer.innerHTML = siteData.slides.map((_, i) => `
+                        <div class="dot ${i === 0 ? 'active' : ''}" onclick="goToSlide(${i})"></div>
+                    `).join('');
+                }
+
+                // Update each slide's width and reset slider position
+                const slideElements = sliderContainer.querySelectorAll('.hero-slide');
+                const slideWidthPercent = 100 / siteData.slides.length;
+                slideElements.forEach(slide => {
+                    slide.style.width = slideWidthPercent + '%';
+                });
+
+                currentSlide = 0;
+                updateSlider();
+            }
+
+            // Update Products
+            const grid = document.getElementById('productGrid');
+            if (grid && siteData.products && siteData.products.length > 0) {
+                grid.innerHTML = siteData.products.map(p => `
+                    <div class="card">
+                        <div class="card-img-container">
+                            <img src="${p.img}" alt="${p.name}">
+                            <div class="overlay-name">${p.name}</div>
+                        </div>
+                        <div class="view-box" onclick="openDetails(this)">VIEW MORE</div>
+                    </div>
+                `).join('');
+            }
+
+            // Update About
+            const aboutText = document.getElementById('aboutText');
+            if (aboutText && siteData.about) {
+                const name = siteData.siteName || "Rohit Furniture";
+                aboutText.innerHTML = `
+                    <h2>About ${name}</h2>
+                    <p>${siteData.about.replace(/\n/g, '<br>')}</p>
+                `;
+            } else if (aboutText && siteData.siteName) {
+                const name = siteData.siteName;
+                const h2 = aboutText.querySelector('h2');
+                if (h2) h2.innerText = `About ${name}`;
+
+                // Update company name in first paragraph bold tag
+                const firstB = aboutText.querySelector('p b');
+                if (firstB) firstB.innerText = name;
+            }
+        }
+
+        window.addEventListener('DOMContentLoaded', fetchSiteData);
+        window.addEventListener('load', fetchSiteData); // Double check for dynamic items
+
+        function filterProducts() {
+            const input = document.getElementById('productSearch');
+            const filter = input.value.toLowerCase();
+            const grid = document.getElementById('productGrid');
+            const cards = grid.getElementsByClassName('card');
+
+            for (let i = 0; i < cards.length; i++) {
+                const nameTag = cards[i].getElementsByClassName('overlay-name')[0];
+                if (nameTag) {
+                    const txtValue = nameTag.textContent || nameTag.innerText;
+                    if (txtValue.toLowerCase().indexOf(filter) > -1) {
+                        cards[i].style.display = "";
+                    } else {
+                        cards[i].style.display = "none";
+                    }
+                }
+            }
+        }
+
+        // Search box mein type karte hi result dikhane ke liye:
+        document.getElementById('productSearch').addEventListener('keyup', filterProducts);
+
+        // --- Owner Info Modal Functions ---
+        const modal = document.getElementById('contactModal');
+
+        function openContactModal() {
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeContactModal() {
+            modal.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        // Modal ke bahar click karne par band karne ke liye
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) closeContactModal();
+        });
+
+        // --- Google Translate Initialization ---
+        function googleTranslateElementInit() {
+            new google.translate.TranslateElement({
+                pageLanguage: 'en',
+                includedLanguages: 'hi,mr,en,gu,ta,te,kn,ml', // Indian languages + English
+                layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
+                autoDisplay: false
+            }, 'google_translate_element');
+        }
+
+        // Load Google Translate Script
+        (function () {
+            var gtScript = document.createElement('script');
+            gtScript.type = 'text/javascript';
+            gtScript.async = true;
+            gtScript.src = 'https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit';
+            document.head.appendChild(gtScript);
+        })();
+
+        // --- About Modal Functions ---
+        const aboutModal = document.getElementById('aboutModal');
+
+        function openAboutModal() {
+            aboutModal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeAboutModal() {
+            aboutModal.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        aboutModal.addEventListener('click', (e) => {
+            if (e.target === aboutModal) closeAboutModal();
+        });
+
+        // --- Details Page Logic ---
+        function openDetails(btn) {
+            const card = btn.closest('.card');
+            const title = card.querySelector('.overlay-name').innerText;
+
+            // Find product data from siteData
+            const product = (siteData.products || []).find(p => p.name === title);
+
+            document.getElementById('detTitle').innerText = title;
+
+            const galleryContainer = document.getElementById('detailsGallery');
+            galleryContainer.innerHTML = (product && product.gallery && product.gallery.length > 0)
+                ? product.gallery.map(img => `
+                    <div style="aspect-ratio: 1; border-radius: 12px; overflow: hidden; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.08); transition: 0.3s;" onclick="openLightbox('${img}')">
+                        <img src="${img}" style="width: 100%; height: 100%; object-fit: cover; transition: 0.5s;">
+                    </div>
+                `).join('')
+                : `<p style="grid-column: 1/-1; color: #999; margin-top: 50px;">No more photos for this product yet.</p>`;
+
+            document.getElementById('detailsPage').style.display = 'block';
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeDetails() {
+            document.getElementById('detailsPage').style.display = 'none';
+            document.body.style.overflow = '';
+        }
+
+        // --- Lightbox Functions ---
+        function openLightbox(imgUrl) {
+            const lb = document.getElementById('lightbox');
+            document.getElementById('lightboxImg').src = imgUrl;
+            lb.style.display = 'flex';
+            setTimeout(() => lb.classList.add('active'), 10);
+        }
+
+        function closeLightbox() {
+            const lb = document.getElementById('lightbox');
+            lb.classList.remove('active');
+            setTimeout(() => {
+                lb.style.display = 'none';
+                document.getElementById('lightboxImg').src = '';
+            }, 300);
+        }
+        // --- Hero Slider Logic ---
+        const slides = document.getElementById('heroSlides');
+        const dots = document.querySelectorAll('.dot');
+        let currentSlide = 0;
+        let slideInterval;
+
+        function updateSlider() {
+            const allDots = document.querySelectorAll('.dot');
+            const slideWidth = 100 / (document.querySelectorAll('.hero-slide').length || 5);
+            slides.style.transform = `translateX(-${currentSlide * slideWidth}%)`;
+            allDots.forEach((dot, index) => {
+                dot.classList.toggle('active', index === currentSlide);
+            });
+        }
+
+        function goToSlide(index) {
+            currentSlide = index;
+            updateSlider();
+            resetInterval();
+        }
+
+        function nextSlide() {
+            const slideCount = document.querySelectorAll('.hero-slide').length || 5;
+            if (slideCount === 0) return;
+            currentSlide = (currentSlide + 1) % slideCount;
+            updateSlider();
+        }
+
+        // Desktop Click Logic
+        function nextSlideClick() {
+            nextSlide();
+            resetInterval();
+        }
+
+        function prevSlideClick() {
+            const slideCount = document.querySelectorAll('.hero-slide').length || 5;
+            currentSlide = (currentSlide - 1 + slideCount) % slideCount;
+            updateSlider();
+            resetInterval();
+        }
+
+        function resetInterval() {
+            clearInterval(slideInterval);
+            slideInterval = setInterval(nextSlide, 5000);
+        }
+
+        // Swipe Support (Infinite Loop 1-5-1)
+        let touchStartX = 0;
+        let touchEndX = 0;
+        let touchStartY = 0;
+        let touchEndY = 0;
+
+        const sliderElement = document.getElementById('heroSlider');
+
+        sliderElement.addEventListener('touchstart', e => {
+            touchStartX = e.changedTouches[0].screenX;
+            touchStartY = e.changedTouches[0].screenY;
+        }, { passive: true });
+
+        sliderElement.addEventListener('touchend', e => {
+            touchEndX = e.changedTouches[0].screenX;
+            touchEndY = e.changedTouches[0].screenY;
+            handleSwipe();
+        }, { passive: true });
+
+        function handleSwipe() {
+            const xDiff = touchStartX - touchEndX;
+            const yDiff = touchStartY - touchEndY;
+            const slideCount = document.querySelectorAll('.hero-slide').length || 5;
+
+            // Only trigger if horizontal swipe is stronger than vertical scroll
+            if (Math.abs(xDiff) > Math.abs(yDiff)) {
+                if (Math.abs(xDiff) > 40) { // Gesture threshold
+                    if (xDiff > 0) {
+                        // Swiped Left -> Go to Next
+                        currentSlide = (currentSlide + 1) % slideCount;
+                    } else {
+                        // Swiped Right -> Go to Previous
+                        currentSlide = (currentSlide - 1 + slideCount) % slideCount;
+                    }
+                    goToSlide(currentSlide);
+                }
+            }
+        }
+
+        resetInterval();
+    </script>
+</body>
+
+</html>

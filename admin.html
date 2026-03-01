@@ -1,0 +1,1296 @@
+<!DOCTYPE html>
+<html lang="hi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rohit Furniture | Admin Panel</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --primary: #ff7e20;
+            --primary-dark: #e66d10;
+            --bg-dark: #1a1a1a;
+            --bg-card: #242424;
+            --text-main: #ffffff;
+            --text-sec: #b3b3b3;
+            --glass: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        /* --- Login Overlay --- */
+        #loginOverlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            -webkit-backdrop-filter: blur(15px);
+            backdrop-filter: blur(15px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+            transition: 0.5s;
+        }
+
+        .login-card {
+            background: var(--bg-card);
+            padding: 40px;
+            border-radius: 30px;
+            width: 90%;
+            max-width: 400px;
+            text-align: center;
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+        }
+
+        .login-card h2 {
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: var(--primary);
+        }
+
+        .login-card input {
+            width: 100%;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 12px;
+            border: 1px solid var(--glass-border);
+            background: rgba(255, 255, 255, 0.03);
+            color: white;
+            outline: none;
+            text-align: center;
+            font-size: 18px;
+            letter-spacing: 2px;
+        }
+
+        .login-card button {
+            width: 100%;
+            padding: 15px;
+            border-radius: 12px;
+            border: none;
+            background: var(--primary);
+            color: white;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .login-card button:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        /* --- Main Admin Layout --- */
+        .admin-container {
+            display: none;
+            /* Hidden until login */
+            padding: 40px 10%;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 50px;
+        }
+
+        .logo-section h1 {
+            font-size: 28px;
+            font-weight: 800;
+        }
+
+        .logo-section span {
+            color: var(--primary);
+        }
+
+        .logout-btn {
+            padding: 10px 20px;
+            background: rgba(255, 0, 0, 0.1);
+            color: #ff4d4d;
+            border: 1px solid rgba(255, 0, 0, 0.2);
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: 0.3s;
+        }
+
+        .logout-btn:hover {
+            background: rgba(255, 0, 0, 0.2);
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .pass-btn {
+            padding: 10px 20px;
+            background: rgba(255, 126, 32, 0.1);
+            color: var(--primary);
+            border: 1px solid rgba(255, 126, 32, 0.2);
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: 0.3s;
+        }
+
+        .pass-btn:hover {
+            background: rgba(255, 126, 32, 0.2);
+        }
+
+        /* --- Dashboard Grid --- */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .admin-card {
+            background: var(--bg-card);
+            border-radius: 25px;
+            padding: 30px;
+            border: 1px solid var(--glass-border);
+            transition: 0.3s;
+        }
+
+        .admin-card:hover {
+            border-color: var(--primary);
+            transform: scale(1.02);
+        }
+
+        .admin-card h3 {
+            margin-bottom: 20px;
+            font-size: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 13px;
+            color: var(--text-sec);
+            margin-bottom: 8px;
+        }
+
+        .phone-input-group {
+            display: flex;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--glass-border);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .phone-prefix {
+            padding: 12px 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border-right: 1px solid var(--glass-border);
+            color: var(--primary);
+            font-weight: 700;
+        }
+
+        .phone-input-group input {
+            border: none !important;
+            background: transparent !important;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--glass-border);
+            border-radius: 10px;
+            color: white;
+            outline: none;
+        }
+
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            filter: grayscale(1);
+        }
+
+        .save-btn {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: 0.3s;
+            box-shadow: 0 4px 15px rgba(255, 126, 32, 0.3);
+        }
+
+        .save-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 126, 32, 0.4);
+        }
+
+        /* --- Product Management --- */
+        .product-list {
+            max-height: 400px;
+            overflow-y: auto;
+            margin-top: 20px;
+            padding-right: 10px;
+        }
+
+        .product-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.02);
+            padding: 12px;
+            border-radius: 12px;
+            margin-bottom: 10px;
+            border: 1px solid var(--glass-border);
+            transition: 0.3s;
+            cursor: pointer;
+        }
+
+        .product-item:hover {
+            border-color: var(--primary);
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .product-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .product-info img {
+            width: 45px;
+            height: 45px;
+            border-radius: 8px;
+            object-fit: cover;
+        }
+
+        .delete-btn {
+            color: #ff4d4d;
+            cursor: pointer;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            transition: 0.3s;
+            background: rgba(255, 77, 77, 0.05);
+        }
+
+        .delete-btn svg {
+            width: 18px;
+            height: 18px;
+            fill: currentColor;
+        }
+
+        .delete-btn:hover {
+            background: rgba(255, 77, 77, 0.2);
+            transform: scale(1.1);
+        }
+
+        .add-product-btn {
+            width: 100%;
+            padding: 12px;
+            background: transparent;
+            border: 2px dashed var(--glass-border);
+            color: var(--text-sec);
+            border-radius: 12px;
+            cursor: pointer;
+            margin-top: 20px;
+            font-weight: 600;
+            transition: 0.3s;
+        }
+
+        .add-product-btn:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        /* --- Slider Preview Styles --- */
+        .slider-manage-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .slide-preview-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--glass-border);
+            border-radius: 15px;
+            padding: 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: 0.3s;
+            position: relative;
+        }
+
+        .slide-preview-card:hover {
+            border-color: var(--primary);
+            background: rgba(255, 126, 32, 0.05);
+        }
+
+        .slide-preview-card img {
+            width: 100%;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 10px;
+            margin-bottom: 8px;
+        }
+
+        .slide-preview-card span {
+            font-size: 11px;
+            color: var(--text-sec);
+            display: block;
+        }
+
+        /* --- Modal Styles --- */
+        .admin-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(10px);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 11000;
+        }
+
+        .admin-modal.active {
+            display: flex;
+        }
+
+        .modal-body {
+            background: var(--bg-card);
+            padding: 35px;
+            border-radius: 25px;
+            width: 90%;
+            max-width: 450px;
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+            position: relative;
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 20px;
+            right: 25px;
+            font-size: 28px;
+            color: var(--text-sec);
+            cursor: pointer;
+            transition: 0.3s;
+            line-height: 1;
+        }
+
+        .close-modal:hover {
+            color: #ff4d4d;
+            transform: rotate(90deg);
+        }
+
+        .modal-body h4 {
+            margin-bottom: 20px;
+            color: var(--primary);
+            text-align: center;
+        }
+
+        .upload-options {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .opt-divider {
+            text-align: center;
+            position: relative;
+            font-size: 12px;
+            color: var(--text-sec);
+        }
+
+        .opt-divider::before,
+        .opt-divider::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            width: 40%;
+            height: 1px;
+            background: var(--glass-border);
+        }
+
+        .opt-divider::before {
+            left: 0;
+        }
+
+        .opt-divider::after {
+            right: 0;
+        }
+
+        .file-drop-area {
+            border: 2px dashed var(--glass-border);
+            padding: 30px;
+            text-align: center;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .file-drop-area:hover {
+            border-color: var(--primary);
+            background: rgba(255, 126, 32, 0.05);
+        }
+
+        .size-info {
+            font-size: 10px;
+            color: #ffb800;
+            margin-top: 5px;
+            display: block;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--glass-border);
+            border-radius: 10px;
+        }
+
+        /* Responsive */
+        /* Alert Modal */
+        .alert-modal-content {
+            text-align: center;
+            padding: 40px;
+        }
+
+        .alert-icon {
+            font-size: 60px;
+            margin-bottom: 20px;
+            display: block;
+        }
+
+        .alert-msg {
+            font-size: 18px;
+            font-weight: 500;
+            margin-bottom: 25px;
+            color: var(--text-main);
+        }
+
+        .alert-ok-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 10px 40px;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .alert-ok-btn:hover {
+            background: var(--primary-dark);
+            transform: scale(1.05);
+        }
+
+        /* Gallery Full-Page Overlay */
+        .gallery-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--bg-dark);
+            z-index: 15000;
+            display: none;
+            flex-direction: column;
+            padding: 40px 10%;
+            overflow-y: auto;
+        }
+
+        .gallery-overlay.active {
+            display: flex;
+        }
+
+        .gallery-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 25px;
+        }
+
+        .gallery-card {
+            background: var(--bg-card);
+            border-radius: 20px;
+            overflow: hidden;
+            border: 1px solid var(--glass-border);
+            position: relative;
+            aspect-ratio: 1;
+            transition: 0.3s;
+        }
+
+        .gallery-card:hover {
+            border-color: var(--primary);
+            transform: translateY(-5px);
+        }
+
+        .gallery-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .gallery-card .del-item {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(255, 77, 77, 0.9);
+            color: white;
+            padding: 8px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .gallery-card .del-item:hover {
+            background: #ff4d4d;
+            transform: scale(1.1);
+        }
+
+        .gallery-upload-btn {
+            position: fixed;
+            bottom: 40px;
+            right: 40px;
+            background: var(--primary);
+            color: white;
+            padding: 20px 40px;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 16px;
+            cursor: pointer;
+            box-shadow: 0 10px 30px rgba(255, 126, 32, 0.4);
+            border: none;
+            transition: 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            z-index: 100;
+        }
+
+        .gallery-upload-btn:hover {
+            transform: scale(1.05) translateY(-5px);
+            background: var(--primary-dark);
+        }
+
+        .back-btn {
+            background: rgba(255, 255, 255, 0.05);
+            color: white;
+            border: 1px solid var(--glass-border);
+            padding: 10px 25px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        @media (max-width: 768px) {
+            .admin-container {
+                padding: 20px 5%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="loginOverlay">
+        <div class="login-card">
+            <h2>Admin Login</h2>
+            <input type="password" id="adminPass" placeholder="Enter Password">
+            <button onclick="checkPass()">ENTER PANEL</button>
+            <p id="errorMsg" style="color: #ff4d4d; font-size: 12px; margin-top: 15px; display: none;">Wrong password,
+                try again!</p>
+        </div>
+    </div>
+
+    <div class="admin-container" id="adminContent">
+        <header>
+            <div class="logo-section">
+                <h1>ROHIT <span>ADMIN</span></h1>
+            </div>
+            <div class="header-actions">
+                <button class="pass-btn" onclick="openPassModal()">🔑 CHANGE PASSWORD</button>
+                <button class="logout-btn" onclick="logout()">LOGOUT</button>
+            </div>
+        </header>
+
+        <div class="dashboard-grid">
+            <!-- Website Settings -->
+            <div class="admin-card">
+                <h3>⚙️ Site Settings</h3>
+                <div class="form-group">
+                    <label>Business Name</label>
+                    <input type="text" id="siteName">
+                </div>
+                <div class="form-group">
+                    <label>Owner Name</label>
+                    <input type="text" id="ownerName">
+                </div>
+                <div class="form-group">
+                    <label>Primary Phone</label>
+                    <div class="phone-input-group">
+                        <span class="phone-prefix">+91</span>
+                        <input type="text" id="sitePhone" placeholder="8957675571">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Email Address</label>
+                    <input type="text" id="siteEmail">
+                </div>
+                <div class="form-group">
+                    <label>Showroom Address</label>
+                    <textarea id="siteAddress" rows="2"></textarea>
+                </div>
+                <button class="save-btn" onclick="saveAll()">Save Changes</button>
+            </div>
+
+            <!-- Slider Management -->
+            <div class="admin-card" id="sliderManagement">
+                <h3>🖼️ Hero Slider</h3>
+                <p style="font-size: 12px; color: var(--text-sec); margin-bottom: 15px;">Click on an image to change it
+                    (Upload or URL)</p>
+                <div class="slider-manage-grid" id="sliderGrid">
+                    <!-- Previews will load here -->
+                </div>
+                <!-- Hidden inputs for data saving -->
+                <div id="slideInputs" style="display: none;">
+                    <input type="text">
+                    <input type="text">
+                    <input type="text">
+                    <input type="text">
+                    <input type="text">
+                </div>
+                <button class="save-btn" onclick="saveAll()">Update Slider</button>
+            </div>
+
+            <!-- Product Management -->
+            <div class="admin-card" style="grid-row: span 2;">
+                <h3>📦 Manage Products</h3>
+                <div class="product-list" id="prodList">
+                    <!-- Products will be loaded here -->
+                    <div class="product-item">
+                        <div class="product-info">
+                            <img src="https://images.unsplash.com/photo-1517705008128-361805f42e86?q=80&w=400" alt="">
+                            <span>Modern Door</span>
+                        </div>
+                        <div class="delete-btn">&times;</div>
+                    </div>
+                    <div class="product-item">
+                        <div class="product-info">
+                            <img src="https://images.unsplash.com/photo-1556911220-e1502402c5ff?q=80&w=400" alt="">
+                            <span>Modular Kitchen</span>
+                        </div>
+                        <div class="delete-btn">&times;</div>
+                    </div>
+                </div>
+                <button class="add-product-btn" onclick="addNewProduct()">+ ADD NEW PRODUCT</button>
+            </div>
+
+            <!-- About Section Editing -->
+            <div class="admin-card">
+                <h3>📝 About Us Content</h3>
+                <div class="form-group">
+                    <label>Main Description</label>
+                    <textarea id="aboutContent"
+                        rows="5">Welcome to Rohit Furniture, where we turn your house into a home with our exquisite collection of premium wooden furniture...</textarea>
+                </div>
+                <button class="save-btn" onclick="saveAll()">Update About</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="admin-modal" id="imageModal">
+        <div class="modal-body">
+            <div class="close-modal" onclick="closeModal()">&times;</div>
+            <h4>🖼️ Change Slide Image</h4>
+            <div class="upload-options">
+                <div class="form-group">
+                    <label>Option 1: Paste Image URL</label>
+                    <input type="text" id="modalUrl" placeholder="https://..." oninput="handleUrlInput()">
+                </div>
+
+                <div class="opt-divider">OR</div>
+
+                <div class="form-group">
+                    <label>Option 2: Upload from Device</label>
+                    <div class="file-drop-area" id="dropArea" onclick="document.getElementById('fileInput').click()">
+                        <span id="uploadStatus">📁 Click to Upload Image</span>
+                        <span class="size-info">Best Size: 1200 x 500 px</span>
+                    </div>
+                </div>
+                <input type="file" id="fileInput" style="display: none;" accept="image/*"
+                    onchange="handleFileUpload(this)">
+
+                <button id="modalApplyBtn" class="save-btn" style="width: 100%; margin-top: 15px;"
+                    onclick="finalApply()" disabled>APPLY & SAVE CHANGES</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Unified Product Editor Full Page -->
+    <div class="gallery-overlay" id="productEditorPage">
+        <div class="gallery-header">
+            <div>
+                <h2 id="editProdPageTitle" style="color: var(--primary); margin-bottom: 5px;">Product Name</h2>
+                <p style="color: var(--text-sec); font-size: 14px;">Edit product details & manage gallery photos</p>
+            </div>
+            <button class="back-btn" onclick="closeProductEditor()">
+                <svg width="20" height="20" fill="white" viewBox="0 0 24 24">
+                    <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z" />
+                </svg>
+                BACK TO PANEL
+            </button>
+        </div>
+
+        <!-- Two-column layout: Edit on left, Gallery on right -->
+        <div style="display: grid; grid-template-columns: 360px 1fr; gap: 40px; align-items: start;">
+
+            <!-- LEFT: Edit Fields -->
+            <div
+                style="background: var(--bg-card); border-radius: 20px; padding: 30px; border: 1px solid var(--glass-border); position: sticky; top: 20px;">
+                <h4 style="font-size: 15px; margin-bottom: 20px; color: var(--text-sec);">📦 PRODUCT DETAILS</h4>
+                <div class="form-group">
+                    <label>Product Name</label>
+                    <input type="text" id="prodNameInput" placeholder="Enter name">
+                </div>
+                <div class="form-group">
+                    <label>Card Image URL</label>
+                    <input type="text" id="prodUrlInput" placeholder="https://..." oninput="handleProdUrlInput()">
+                </div>
+                <div class="opt-divider">OR</div>
+                <div class="form-group">
+                    <label>Upload Card Image</label>
+                    <div class="file-drop-area" id="prodDropArea"
+                        onclick="document.getElementById('prodFileInput').click()">
+                        <span id="prodUploadStatus">📁 Click to Upload Image</span>
+                        <span class="size-info">Best Size: 400 x 400 px</span>
+                    </div>
+                </div>
+                <input type="file" id="prodFileInput" style="display: none;" accept="image/*"
+                    onchange="handleProdFileUpload(this)">
+                <button class="save-btn" style="width: 100%; margin-top: 15px;" onclick="applyProductChanges()">SAVE
+                    CHANGES</button>
+            </div>
+
+            <!-- RIGHT: Gallery -->
+            <div>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
+                    <h4 style="font-size: 15px; color: var(--text-sec);">🖼️ PRODUCT GALLERY (VIEW MORE PHOTOS)</h4>
+                    <button class="gallery-upload-btn" style="position: static; padding: 12px 25px; font-size: 14px;"
+                        onclick="document.getElementById('fullGalleryFile').click()">
+                        <svg width="18" height="18" fill="white" viewBox="0 0 24 24">
+                            <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z" />
+                        </svg>
+                        ADD PHOTO
+                    </button>
+                </div>
+                <div class="gallery-grid" id="fullGalleryGrid">
+                    <!-- Gallery items here -->
+                </div>
+                <input type="file" id="fullGalleryFile" style="display: none;" accept="image/*"
+                    onchange="handleGalleryUpload(this)">
+            </div>
+        </div>
+    </div>
+    <div class="admin-modal" id="passModal">
+        <div class="modal-body">
+            <div class="close-modal" onclick="closePassModal()">&times;</div>
+            <h4>🔐 Change Admin Password</h4>
+            <div class="upload-options">
+                <div class="form-group">
+                    <label>Old Password</label>
+                    <input type="password" id="oldPass" placeholder="Enter current password">
+                </div>
+                <div class="form-group">
+                    <label>New Password</label>
+                    <input type="password" id="newPass" placeholder="Enter new password">
+                </div>
+                <div class="form-group">
+                    <label>Confirm New Password</label>
+                    <input type="password" id="confirmPass" placeholder="Confirm new password">
+                </div>
+                <button class="save-btn" style="width: 100%; margin-top: 15px;" onclick="saveNewPassword()">UPDATE
+                    PASSWORD</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Alert Modal -->
+    <div class="admin-modal" id="alertModal">
+        <div class="modal-body alert-modal-content">
+            <span id="alertIcon" class="alert-icon">✅</span>
+            <div id="alertMsg" class="alert-msg">Changes saved successfully!</div>
+            <button class="alert-ok-btn" onclick="closeAlertModal()">OK</button>
+        </div>
+    </div>
+
+    <script>
+        // Global siteData state
+        let siteData = {};
+        let currentSlideIndex = -1;
+
+        function showToast(msg, type = 'success') {
+            const modal = document.getElementById('alertModal');
+            const msgEl = document.getElementById('alertMsg');
+            const iconEl = document.getElementById('alertIcon');
+
+            msgEl.innerText = msg;
+            iconEl.innerText = type === 'success' ? '✅' : '❌';
+            iconEl.style.color = type === 'success' ? '#2ecc71' : '#e74c3c';
+
+            modal.classList.add('active');
+        }
+
+        function closeAlertModal() {
+            document.getElementById('alertModal').classList.remove('active');
+        }
+
+        async function fetchSiteData() {
+            try {
+                const response = await fetch('/api/data');
+                siteData = await response.json();
+                loadDataIntoForm();
+            } catch (error) {
+                console.error('Error fetching data:', error);
+                siteData = JSON.parse(localStorage.getItem('rohitFurnitureData')) || {};
+            }
+        }
+
+        async function checkPass() {
+            const inputPassword = document.getElementById('adminPass').value.trim();
+            const errorMsg = document.getElementById('errorMsg');
+
+            errorMsg.style.display = 'none';
+
+            try {
+                // Point to live Render URL as requested
+                const response = await fetch('/api/data');
+                if (!response.ok) throw new Error('DB Connection Issue');
+
+                siteData = await response.json();
+
+                // Case-sensitive comparison: exactly as specified
+                if (inputPassword === siteData.adminPass) {
+                    document.getElementById('loginOverlay').style.display = 'none';
+                    document.getElementById('adminContent').style.display = 'block';
+                    loadDataIntoForm();
+                } else {
+                    errorMsg.innerText = "Wrong password, try again!";
+                    errorMsg.style.display = 'block';
+                }
+            } catch (error) {
+                console.error("Login Error:", error);
+                errorMsg.innerText = "Database connection failed";
+                errorMsg.style.display = 'block';
+            }
+        }
+
+        function loadDataIntoForm() {
+            document.getElementById('siteName').value = siteData.siteName || "";
+            document.getElementById('ownerName').value = siteData.ownerName || "";
+            document.getElementById('sitePhone').value = (siteData.phone || "").replace('+91', '').trim();
+            document.getElementById('siteEmail').value = siteData.email || "";
+            document.getElementById('siteAddress').value = siteData.address || "";
+
+            renderSlidePreviews();
+
+            document.getElementById('aboutContent').value = siteData.about || "";
+            renderProducts();
+        }
+
+        function renderSlidePreviews() {
+            const grid = document.getElementById('sliderGrid');
+            const hiddenInputs = document.querySelectorAll('#slideInputs input');
+
+            grid.innerHTML = (siteData.slides || []).map((s, i) => {
+                if (hiddenInputs[i]) hiddenInputs[i].value = s;
+                return `
+                    <div class="slide-preview-card" onclick="openImageModal(${i})">
+                        <img src="${s}" alt="Slide ${i + 1}">
+                        <span>Slide ${i + 1}</span>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // --- Image Modal Logic ---
+        let tempUploadUrl = "";
+
+        function openImageModal(index) {
+            currentSlideIndex = index;
+            tempUploadUrl = "";
+            document.getElementById('imageModal').classList.add('active');
+            document.getElementById('modalUrl').value = siteData.slides[index] || "";
+            document.getElementById('uploadStatus').innerText = "📁 Click to Upload Image";
+            checkModalActivity();
+        }
+
+        function closeModal() {
+            document.getElementById('imageModal').classList.remove('active');
+        }
+
+        // --- Password Modal Logic ---
+        function openPassModal() {
+            document.getElementById('passModal').classList.add('active');
+            document.getElementById('oldPass').value = "";
+            document.getElementById('newPass').value = "";
+            document.getElementById('confirmPass').value = "";
+        }
+
+        function closePassModal() {
+            document.getElementById('passModal').classList.remove('active');
+        }
+
+        async function saveNewPassword() {
+            const oldP = document.getElementById('oldPass').value;
+            const newP = document.getElementById('newPass').value;
+            const confP = document.getElementById('confirmPass').value;
+
+            if (!oldP || !newP || !confP) {
+                alert("Please fill all fields!");
+                return;
+            }
+
+            if (oldP !== siteData.adminPass) {
+                alert("Old password is incorrect!");
+                return;
+            }
+
+            if (newP !== confP) {
+                alert("New passwords do not match!");
+                return;
+            }
+
+            if (newP.length < 4) {
+                alert("Password must be at least 4 characters!");
+                return;
+            }
+
+            siteData.adminPass = newP;
+            await saveAll();
+            closePassModal();
+            showToast("Password changed successfully!");
+            setTimeout(() => logout(), 2000);
+        }
+
+        // --- Product Edit Logic (Unified Full Page) ---
+        let currentProdIndex = -1;
+        let tempProdUploadUrl = "";
+        let currentGallery = [];
+
+        function openProductEdit(index) {
+            currentProdIndex = index;
+            tempProdUploadUrl = "";
+            const product = siteData.products[index];
+            currentGallery = product.gallery || [];
+
+            document.getElementById('editProdPageTitle').innerText = product.name;
+            document.getElementById('prodNameInput').value = product.name;
+            document.getElementById('prodUrlInput').value = product.img;
+            document.getElementById('prodUploadStatus').innerText = "📁 Click to Upload Image";
+            renderFullGallery();
+
+            document.getElementById('productEditorPage').classList.add('active');
+        }
+
+        function closeProductEditor() {
+            document.getElementById('productEditorPage').classList.remove('active');
+        }
+
+        function renderFullGallery() {
+            const grid = document.getElementById('fullGalleryGrid');
+            if (currentGallery.length === 0) {
+                grid.innerHTML = `
+                    <div style="grid-column: 1/-1; padding: 80px 20px; text-align: center; color: var(--text-sec);">
+                        <svg width="80" height="80" fill="currentColor" opacity="0.15" viewBox="0 0 24 24" style="margin-bottom: 20px; display: block; margin-left: auto; margin-right: auto;"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg>
+                        <p>No photos yet. Click "ADD PHOTO" to add gallery images.</p>
+                    </div>
+                `;
+                return;
+            }
+            grid.innerHTML = currentGallery.map((img, i) => `
+                <div class="gallery-card">
+                    <img src="${img}" alt="Gallery ${i}">
+                    <div class="del-item" onclick="removeGalleryItem(${i})">
+                        <svg width="18" height="18" fill="white" viewBox="0 0 24 24"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function removeGalleryItem(index) {
+            if (confirm("Delete this photo from gallery?")) {
+                currentGallery.splice(index, 1);
+                renderFullGallery();
+            }
+        }
+
+        async function handleGalleryUpload(input) {
+            if (!input.files || !input.files[0]) return;
+            const btn = document.querySelector('#productEditorPage .gallery-upload-btn');
+            const originalHTML = btn.innerHTML;
+            btn.innerHTML = "⏳ Uploading...";
+
+            const formData = new FormData();
+            formData.append('image', input.files[0]);
+
+            try {
+                const response = await fetch('/api/upload', { method: 'POST', body: formData });
+                const result = await response.json();
+                if (result.url) {
+                    currentGallery.push(result.url);
+                    renderFullGallery();
+                    showToast("Photo added to gallery!");
+                }
+            } catch (error) {
+                showToast('Upload failed!', 'error');
+            } finally {
+                btn.innerHTML = originalHTML;
+                input.value = "";
+            }
+        }
+
+        function handleProdUrlInput() {
+            tempProdUploadUrl = "";
+            document.getElementById('prodUploadStatus').innerText = "📁 Click to Upload Image";
+        }
+
+        async function handleProdFileUpload(input) {
+            if (!input.files || !input.files[0]) return;
+            const status = document.getElementById('prodUploadStatus');
+            status.innerText = "⏳ Uploading...";
+            document.getElementById('prodUrlInput').value = "";
+
+            const formData = new FormData();
+            formData.append('image', input.files[0]);
+
+            try {
+                const response = await fetch('/api/upload', { method: 'POST', body: formData });
+                const result = await response.json();
+                if (result.url) {
+                    tempProdUploadUrl = result.url;
+                    status.innerText = "✅ Upload Successful!";
+                }
+            } catch (error) {
+                status.innerText = "❌ Upload Failed!";
+                showToast('Upload failed!', 'error');
+            }
+        }
+
+        async function applyProductChanges() {
+            const name = document.getElementById('prodNameInput').value.trim();
+            const url = tempProdUploadUrl || document.getElementById('prodUrlInput').value.trim();
+
+            if (!name || !url) {
+                showToast("Please provide both name and image!", "error");
+                return;
+            }
+
+            siteData.products[currentProdIndex] = { name, img: url, gallery: currentGallery };
+            renderProducts();
+            await saveAll();
+            closeProductEditor();
+        }
+
+        function renderProducts() {
+            const list = document.getElementById('prodList');
+            list.innerHTML = (siteData.products || []).map((p, i) => `
+                <div class="product-item" onclick="openProductEdit(${i})">
+                    <div class="product-info">
+                        <img src="${p.img}" alt="">
+                        <span>${p.name}</span>
+                    </div>
+                    <div class="delete-btn" onclick="event.stopPropagation(); removeProd(${i})">
+                        <svg viewBox="0 0 24 24"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function addNewProduct() {
+            // Add a placeholder product
+            const newProd = {
+                name: "New Product",
+                img: "https://images.unsplash.com/photo-1517705008128-361805f42e86?q=80&w=400"
+            };
+            siteData.products.push(newProd);
+            renderProducts();
+            showToast("New blank product added!");
+            // Automatically open edit for the new product
+            openProductEdit(siteData.products.length - 1);
+        }
+
+        function checkModalActivity() {
+            const urlVal = document.getElementById('modalUrl').value.trim();
+            const btn = document.getElementById('modalApplyBtn');
+            if (urlVal || tempUploadUrl) {
+                btn.disabled = false;
+            } else {
+                btn.disabled = true;
+            }
+        }
+
+        async function handleFileUpload(input) {
+            if (!input.files || !input.files[0]) return;
+
+            const status = document.getElementById('uploadStatus');
+            status.innerText = "⏳ Uploading...";
+
+            // Clear URL input when uploading a file
+            document.getElementById('modalUrl').value = "";
+
+            const formData = new FormData();
+            formData.append('image', input.files[0]);
+
+            try {
+                const response = await fetch('/api/upload', {
+                    method: 'POST',
+                    body: formData
+                });
+                const result = await response.json();
+                if (result.url) {
+                    tempUploadUrl = result.url;
+                    status.innerText = "✅ Upload Successful!";
+                    checkModalActivity();
+                }
+            } catch (error) {
+                console.error('Upload failed:', error);
+                status.innerText = "❌ Upload Failed!";
+                showToast('Upload failed. Check server!', 'error');
+            }
+        }
+
+        function handleUrlInput() {
+            // Clear temp upload if user starts typing a URL
+            if (tempUploadUrl) {
+                tempUploadUrl = "";
+                document.getElementById('uploadStatus').innerText = "📁 Click to Upload Image";
+            }
+            checkModalActivity();
+        }
+
+        async function finalApply() {
+            const urlFromInput = document.getElementById('modalUrl').value.trim();
+            const finalUrl = tempUploadUrl || urlFromInput;
+
+            if (finalUrl) {
+                updateSlide(finalUrl);
+                await saveAll();
+                closeModal();
+            }
+        }
+
+        function updateSlide(newUrl) {
+            siteData.slides[currentSlideIndex] = newUrl;
+            renderSlidePreviews();
+        }
+
+        async function saveAll() {
+            siteData.siteName = document.getElementById('siteName').value;
+            siteData.ownerName = document.getElementById('ownerName').value;
+            siteData.phone = document.getElementById('sitePhone').value;
+            siteData.email = document.getElementById('siteEmail').value;
+            siteData.address = document.getElementById('siteAddress').value;
+            siteData.about = document.getElementById('aboutContent').value;
+
+            try {
+                const response = await fetch('/api/save', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(siteData)
+                });
+                if (response.ok) {
+                    showToast('Changes saved successfully!');
+                } else {
+                    showToast('Error saving to backend.', 'error');
+                }
+            } catch (error) {
+                console.error('Save error:', error);
+                localStorage.setItem('rohitFurnitureData', JSON.stringify(siteData));
+                showToast('Saved to LocalStorage (Offline)', 'error');
+            }
+        }
+
+        async function removeProd(index) {
+            if (confirm("Are you sure you want to delete this product?")) {
+                siteData.products.splice(index, 1);
+                renderProducts();
+
+                // Special save to show delete message
+                try {
+                    const response = await fetch('/api/save', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(siteData)
+                    });
+                    if (response.ok) {
+                        showToast('🗑️ Product Deleted Successfully!');
+                    }
+                } catch (e) {
+                    showToast('Deleted (Local Only)', 'error');
+                }
+            }
+        }
+
+        function logout() { location.reload(); }
+    </script>
+</body>
+
+</html>
