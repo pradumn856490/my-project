@@ -1427,41 +1427,48 @@
                 ownerAvatar.innerText = initials;
             }
 
-            // Update Contact Info
-            const fullPhone = siteData.phone.startsWith('+91') ? siteData.phone : '+91 ' + siteData.phone;
+            // Update Contact Info (with safe check for undefined)
+            const phoneVal = siteData.phone || "";
+            const fullPhone = phoneVal ? (phoneVal.startsWith('+91') ? phoneVal : '+91 ' + phoneVal) : "";
             const purePhone = fullPhone.replace(/\s/g, '');
 
-            const phoneLinks = document.querySelectorAll('a[href^="tel:"]');
-            phoneLinks.forEach(link => {
-                link.href = `tel:${purePhone}`;
-                const span = link.querySelector('span');
-                if (span) span.innerText = fullPhone;
-            });
+            if (phoneVal) {
+                const phoneLinks = document.querySelectorAll('a[href^="tel:"]');
+                phoneLinks.forEach(link => {
+                    link.href = `tel:${purePhone}`;
+                    const span = link.querySelector('span');
+                    if (span) span.innerText = fullPhone;
+                });
 
-            const waLinks = document.querySelectorAll('a[href*="wa.me"]');
-            waLinks.forEach(link => {
-                link.href = `https://wa.me/${purePhone.replace('+', '')}`;
-            });
+                const waLinks = document.querySelectorAll('a[href*="wa.me"]');
+                waLinks.forEach(link => {
+                    link.href = `https://wa.me/${purePhone.replace('+', '')}`;
+                });
+            }
 
-            const mailLinks = document.querySelectorAll('a[href^="mailto:"]');
-            mailLinks.forEach(link => {
-                link.href = `mailto:${siteData.email}`;
-                const span = link.querySelector('span');
-                if (span) span.innerText = siteData.email;
-            });
+            if (siteData.email) {
+                const mailLinks = document.querySelectorAll('a[href^="mailto:"]');
+                mailLinks.forEach(link => {
+                    link.href = `mailto:${siteData.email}`;
+                    const span = link.querySelector('span');
+                    if (span) span.innerText = siteData.email;
+                });
+            }
 
-            // Update Address
-            const addrContainers = document.querySelectorAll('.info-row div b');
-            addrContainers.forEach(b => {
-                if (b.innerText === 'Showroom Address') {
-                    const span = b.nextElementSibling;
-                    if (span) {
-                        span.innerText = siteData.address;
-                        const anchor = b.closest('a');
-                        if (anchor) anchor.href = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(siteData.address)}`;
+            // Update Address (with safe check)
+            if (siteData.address) {
+                const addrContainers = document.querySelectorAll('.info-row div b');
+                addrContainers.forEach(b => {
+                    if (b.innerText === 'Showroom Address') {
+                        const span = b.nextElementSibling;
+                        if (span) {
+                            span.innerText = siteData.address;
+                            const anchor = b.closest('a');
+                            if (anchor) anchor.href = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(siteData.address)}`;
+                        }
                     }
-                }
-            });
+                });
+            }
 
             // Update Slider
             const sliderContainer = document.getElementById('heroSlides');
@@ -1733,38 +1740,6 @@
         resetInterval();
     </script>
 
-    <script>
-        (async function () {
-            let data = {};
-            try { data = await fetch('/api/data').then(r => r.json()); } catch (e) { data = {}; }
-
-            // Update site name/logo
-            const logo = document.querySelector('.logo-area');
-            if (logo && data.siteName) logo.innerText = data.siteName;
-
-            // Hero slides
-            if (Array.isArray(data.slides) && data.slides.length > 0) {
-                const heroSlides = document.getElementById('heroSlides');
-                if (heroSlides) heroSlides.innerHTML = data.slides.map(s => `<div class="hero-slide"><img src="${s}" alt=""></div>`).join('');
-
-                const dotsWrap = document.querySelector('.slider-dots');
-                if (dotsWrap) dotsWrap.innerHTML = data.slides.map((_, i) => `<div class="dot ${i === 0 ? 'active' : ''}" onclick="goToSlide(${i})"></div>`).join('');
-                currentSlide = 0; updateSlider();
-            }
-
-            // Products
-            if (Array.isArray(data.products) && data.products.length > 0) {
-                const grid = document.querySelector('.product-grid');
-                if (grid) grid.innerHTML = data.products.map(p => `
-                    <div class="card">
-                        <div class="card-img-container"><img src="${p.img || ''}" alt=""></div>
-                        <div class="overlay-name">${p.name || ''}</div>
-                        <div class="view-box">₹ ${p.price || ''}</div>
-                    </div>
-                `).join('');
-            }
-        })();
-    </script>
 </body>
 
 </html>
