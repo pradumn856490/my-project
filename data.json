@@ -1,0 +1,22 @@
+{
+  "siteName": "Pradumn Yadav ",
+  "about": "Welcome to Pradumn Furniture",
+  "slides": [],
+  "products": [
+    {
+      "name": "New Product",
+      "img": "https://images.unsplash.com/photo-1517705008128-361805f42e86?q=80&w=400",
+      "gallery": [
+        "/uploads/1772644546903-ROHIT_YADAV.png"
+      ]
+    },
+    {
+      "name": "Aa",
+      "img": "/uploads/1774790408930-04e341444d0b933349cf5921d71373d1-removebg-preview.png",
+      "gallery": [
+        "/uploads/1774790465212-images_(2).jpeg"
+      ]
+    }
+  ],
+  "adminPass": "Yadav"
+}
