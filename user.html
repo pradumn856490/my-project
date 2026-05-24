@@ -1069,38 +1069,38 @@
     <div class="modal-overlay notranslate" id="contactModal">
         <div class="owner-card">
             <span class="close-modal" onclick="closeContactModal()">&times;</span>
-            <div class="owner-avatar">PY</div>
+            <div class="owner-avatar" id="ownerAvatar">PY</div>
             <div class="owner-details">
-                <h3>Pradumn Yadav</h3>
+                <h3 id="ownerNameEl">Pradumn Yadav</h3>
                 <span class="tag">OWNER & FOUNDER</span>
 
-                <a href="tel:+918957675571" class="info-row">
+                <a href="tel:+918957675571" class="info-row" id="phoneLink">
                     <div>
                         <b>Phone Number</b>
-                        <span>+91 8957675571</span>
+                        <span id="phoneDisplay">+91 8957675571</span>
                     </div>
                 </a>
 
-                <a href="mailto:pradumn@gmail.com" class="info-row">
+                <a href="mailto:pradumn@gmail.com" class="info-row" id="emailLink">
                     <div>
                         <b>Email Address</b>
-                        <span>pradumn@gmail.com</span>
+                        <span id="emailDisplay">pradumn@gmail.com</span>
                     </div>
                 </a>
 
                 <a href="https://www.google.com/maps/search/?api=1&query=Anish+Furniture+Jay+Ganesh+Colony+Nashik"
-                    target="_blank" rel="noopener" class="info-row">
+                    target="_blank" rel="noopener" class="info-row" id="addressLink">
                     <div>
                         <b>Showroom Address</b>
-                        <span>Jay Ganesh Colony, Pimpalgaon Bahula Siwar, Shramik Nagar, Satpur, Nashik</span>
+                        <span id="addressDisplay">Jay Ganesh Colony, Pimpalgaon Bahula Siwar, Shramik Nagar, Satpur, Nashik</span>
                     </div>
                 </a>
             </div>
 
             <div class="action-buttons">
-                <a href="tel:+918957675571" class="btn btn-call">CALL NOW</a>
+                <a href="tel:+918957675571" class="btn btn-call" id="callBtn">CALL NOW</a>
                 <a href="https://wa.me/918957675571" target="_blank" rel="noopener"
-                    class="btn btn-whatsapp">WHATSAPP</a>
+                    class="btn btn-whatsapp" id="waBtn">WHATSAPP</a>
             </div>
         </div>
     </div>
@@ -1413,96 +1413,85 @@
         }
 
         function applySiteData() {
-            // Update Site Name
-            document.querySelectorAll('.logo-area img').forEach(img => img.alt = siteData.siteName);
-            const searchH2 = document.querySelector('.main-search-area h2');
-            if (searchH2) searchH2.innerHTML = `${siteData.siteName.split(' ')[0]} <span>${siteData.siteName.split(' ')[1] || ''}</span>`;
 
-            // Update Owner Name
-            const ownerH3 = document.querySelector('.owner-details h3');
-            if (ownerH3) ownerH3.innerText = siteData.ownerName || "Pradumn Yadav";
-            const ownerAvatar = document.querySelector('.owner-avatar');
-            if (ownerAvatar && siteData.ownerName) {
-                const initials = siteData.ownerName.split(' ').map(n => n[0]).join('').toUpperCase();
-                ownerAvatar.innerText = initials;
+            // --- 1. Business Name ---
+            if (siteData.siteName) {
+                const searchH2 = document.querySelector('.main-search-area h2');
+                const parts = siteData.siteName.trim().split(' ');
+                if (searchH2) searchH2.innerHTML = `${parts[0]} <span>${parts.slice(1).join(' ')}</span>`;
             }
 
-            // Update Contact Info (with safe check for undefined)
-            const phoneVal = siteData.phone || "";
-            const fullPhone = phoneVal ? (phoneVal.startsWith('+91') ? phoneVal : '+91 ' + phoneVal) : "";
-            const purePhone = fullPhone.replace(/\s/g, '');
+            // --- 2. Owner Name & Avatar (Direct ID) ---
+            if (siteData.ownerName) {
+                const ownerNameEl = document.getElementById('ownerNameEl');
+                if (ownerNameEl) ownerNameEl.innerText = siteData.ownerName;
 
-            if (phoneVal) {
-                const phoneLinks = document.querySelectorAll('a[href^="tel:"]');
-                phoneLinks.forEach(link => {
-                    link.href = `tel:${purePhone}`;
-                    const span = link.querySelector('span');
-                    if (span) span.innerText = fullPhone;
-                });
-
-                const waLinks = document.querySelectorAll('a[href*="wa.me"]');
-                waLinks.forEach(link => {
-                    link.href = `https://wa.me/${purePhone.replace('+', '')}`;
-                });
+                const ownerAvatarEl = document.getElementById('ownerAvatar');
+                if (ownerAvatarEl) {
+                    const initials = siteData.ownerName.trim().split(' ').map(n => n[0] || '').join('').toUpperCase();
+                    ownerAvatarEl.innerText = initials;
+                }
             }
 
+            // --- 3. Phone (Direct ID) ---
+            if (siteData.phone) {
+                const phoneVal = siteData.phone.toString().trim();
+                const fullPhone = phoneVal.startsWith('+91') ? phoneVal : '+91 ' + phoneVal;
+                const purePhone = fullPhone.replace(/\s/g, '');
+
+                const phoneLink = document.getElementById('phoneLink');
+                const phoneDisplay = document.getElementById('phoneDisplay');
+                const callBtn = document.getElementById('callBtn');
+                const waBtn = document.getElementById('waBtn');
+
+                if (phoneLink) phoneLink.href = 'tel:' + purePhone;
+                if (phoneDisplay) phoneDisplay.innerText = fullPhone;
+                if (callBtn) callBtn.href = 'tel:' + purePhone;
+                if (waBtn) waBtn.href = 'https://wa.me/' + purePhone.replace('+', '');
+            }
+
+            // --- 4. Email (Direct ID) ---
             if (siteData.email) {
-                const mailLinks = document.querySelectorAll('a[href^="mailto:"]');
-                mailLinks.forEach(link => {
-                    link.href = `mailto:${siteData.email}`;
-                    const span = link.querySelector('span');
-                    if (span) span.innerText = siteData.email;
-                });
+                const emailLink = document.getElementById('emailLink');
+                const emailDisplay = document.getElementById('emailDisplay');
+                if (emailLink) emailLink.href = 'mailto:' + siteData.email;
+                if (emailDisplay) emailDisplay.innerText = siteData.email;
             }
 
-            // Update Address (with safe check)
+            // --- 5. Address (Direct ID) ---
             if (siteData.address) {
-                const addrContainers = document.querySelectorAll('.info-row div b');
-                addrContainers.forEach(b => {
-                    if (b.innerText === 'Showroom Address') {
-                        const span = b.nextElementSibling;
-                        if (span) {
-                            span.innerText = siteData.address;
-                            const anchor = b.closest('a');
-                            if (anchor) anchor.href = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(siteData.address)}`;
-                        }
-                    }
-                });
+                const addressLink = document.getElementById('addressLink');
+                const addressDisplay = document.getElementById('addressDisplay');
+                if (addressDisplay) addressDisplay.innerText = siteData.address;
+                if (addressLink) addressLink.href = 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(siteData.address);
             }
 
-            // Update Slider
+            // --- 6. About Us Content (Direct ID) ---
+            const aboutText = document.getElementById('aboutText');
+            if (aboutText && siteData.about) {
+                const name = siteData.siteName || 'Pradumn Furniture';
+                aboutText.innerHTML = '<h2>About ' + name + '</h2><p>' + siteData.about.replace(/\n/g, '<br>') + '</p>';
+            }
+
+            // --- 7. Hero Slider ---
             const sliderContainer = document.getElementById('heroSlides');
             if (sliderContainer && siteData.slides && siteData.slides.length > 0) {
-                sliderContainer.innerHTML = siteData.slides.map(s => `
-                    <div class="hero-slide"><img src="${s}" alt="Slide"></div>
-                `).join('');
+                sliderContainer.innerHTML = siteData.slides.map(s => '<div class="hero-slide"><img src="' + s + '" alt="Slide"></div>').join('');
                 sliderContainer.style.width = (siteData.slides.length * 100) + '%';
-                // Update dots
                 const dotsContainer = document.getElementById('sliderDots');
                 if (dotsContainer) {
-                    dotsContainer.innerHTML = siteData.slides.map((_, i) => `
-                        <div class="dot ${i === 0 ? 'active' : ''}" onclick="goToSlide(${i})"></div>
-                    `).join('');
+                    dotsContainer.innerHTML = siteData.slides.map((_, i) => '<div class="dot ' + (i === 0 ? 'active' : '') + '" onclick="goToSlide(' + i + ')"></div>').join('');
                 }
-
-                // Update each slide's width and reset slider position
                 const slideElements = sliderContainer.querySelectorAll('.hero-slide');
                 const slideWidthPercent = 100 / siteData.slides.length;
-                slideElements.forEach(slide => {
-                    slide.style.width = slideWidthPercent + '%';
-                });
-
+                slideElements.forEach(slide => { slide.style.width = slideWidthPercent + '%'; });
                 currentSlide = 0;
                 updateSlider();
             }
 
-            // Update Products
+            // --- 8. Products Grid ---
             const grid = document.getElementById('productGrid');
             if (grid && siteData.products && siteData.products.length > 0) {
-                grid.innerHTML = siteData.products.map(p => `
-                    <div class="card">
-                        <div class="card-img-container">
-                            <img src="${p.img}" alt="${p.name}">
                             <div class="overlay-name">${p.name}</div>
                         </div>
                         <div class="view-box" onclick="openDetails(this)">VIEW MORE</div>
@@ -1510,23 +1499,6 @@
                 `).join('');
             }
 
-            // Update About
-            const aboutText = document.getElementById('aboutText');
-            if (aboutText && siteData.about) {
-                const name = siteData.siteName || "Pradumn Furniture";
-                aboutText.innerHTML = `
-                    <h2>About ${name}</h2>
-                    <p>${siteData.about.replace(/\n/g, '<br>')}</p>
-                `;
-            } else if (aboutText && siteData.siteName) {
-                const name = siteData.siteName;
-                const h2 = aboutText.querySelector('h2');
-                if (h2) h2.innerText = `About ${name}`;
-
-                // Update company name in first paragraph bold tag
-                const firstB = aboutText.querySelector('p b');
-                if (firstB) firstB.innerText = name;
-            }
         }
 
         window.addEventListener('DOMContentLoaded', fetchSiteData);
