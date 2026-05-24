@@ -73,7 +73,7 @@ app.post('/api/save', (req, res) => {
     const data = loadData();
 
     // Merge allowed fields
-    const allowed = ['siteName', 'about', 'slides', 'products', 'adminPass'];
+    const allowed = ['siteName', 'ownerName', 'phone', 'email', 'address', 'about', 'slides', 'products', 'adminPass'];
     allowed.forEach(k => { if (k in payload) data[k] = payload[k]; });
     saveData(data);
     res.json({ ok: true });
