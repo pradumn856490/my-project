@@ -1492,11 +1492,9 @@
             // --- 8. Products Grid ---
             const grid = document.getElementById('productGrid');
             if (grid && siteData.products && siteData.products.length > 0) {
-                            <div class="overlay-name">${p.name}</div>
-                        </div>
-                        <div class="view-box" onclick="openDetails(this)">VIEW MORE</div>
-                    </div>
-                `).join('');
+                grid.innerHTML = siteData.products.map(function(p) {
+                    return '<div class="card"><div class="card-img-container"><img src="' + (p.img || '') + '" alt="' + (p.name || '') + '"><div class="overlay-name">' + (p.name || '') + '</div></div><div class="view-box" onclick="openDetails(this)">VIEW MORE</div></div>';
+                }).join('');
             }
 
         }
